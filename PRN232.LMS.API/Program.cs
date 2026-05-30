@@ -52,8 +52,15 @@ app.UseSwaggerUI(c =>
 app.MapGet("/", () => Results.Redirect("/swagger"))
    .ExcludeFromDescription();
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+
+// Ensure the database is created dynamically on startup (important for blank docker environments)
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<LmsDbContext>();
+    context.Database.EnsureCreated();
+}
 
 app.Run();
