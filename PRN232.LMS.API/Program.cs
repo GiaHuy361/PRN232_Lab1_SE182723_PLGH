@@ -61,6 +61,7 @@ using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<LmsDbContext>();
     context.Database.EnsureCreated();
+    DbSeeder.Seed(context); // Automatically seeds if empty
 }
 
 app.Run();
